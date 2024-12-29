@@ -21,7 +21,7 @@ export default function VerifyResetPasswordPage() {
                                     </div>
                                     <span className="sr-only">{constants.SITE_NAME}</span>
                                 </Link>
-                                <h1 className="text-xl font-bold">Verify your email address.</h1>
+                                <h1 className="text-xl font-bold">Reset Password</h1>
                             </div>
                             <OtpForm />
                         </div>

@@ -1,9 +1,9 @@
 import { InferSelectModel, relations } from 'drizzle-orm';
-import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { timeStams } from './utils.sql';
 
 export const userTable = pgTable('user', {
-    id: text('id').primaryKey().notNull(),
+    id: uuid('id').primaryKey().notNull().defaultRandom(),
     name: text('name'),
     email: text('email').unique().notNull(),
     passwordHash: text('password_hash').notNull(),
@@ -21,7 +21,7 @@ export const userRelations = relations(userTable, ({ many }) => ({
 
 export const sessionTable = pgTable('session', {
     id: text('id').primaryKey(),
-    userId: text('user_id')
+    userId: uuid('user_id')
         .notNull()
         .references(() => userTable.id, { onDelete: 'cascade' }),
     expiresAt: timestamp('expires_at', {
@@ -39,14 +39,14 @@ export const sessionRelations = relations(sessionTable, ({ one }) => ({
 }));
 
 export const otpTable = pgTable('otp', {
-    id: text('id').primaryKey().notNull(),
-    userId: text('user_id')
+    id: uuid('id').primaryKey().notNull().defaultRandom(),
+    userId: uuid('user_id')
         .notNull()
         .references(() => userTable.id, { onDelete: 'cascade' }),
     expiresAt: timestamp('expires_at', {
         withTimezone: true,
         mode: 'date',
-    }),
+    }).notNull(),
     otpType: text('otp_type', {
         enum: ['EMAIL_VERIFICATION', 'PASSWORD_RESET'],
     }).notNull(),

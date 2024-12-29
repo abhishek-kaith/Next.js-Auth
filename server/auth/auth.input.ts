@@ -72,6 +72,15 @@ export const resetPasswordFormInput = z.object({
 });
 
 export const resetPasswordVerifyFormInput = z.object({
+    password: z
+        .string({
+            required_error: 'Password is required.',
+        })
+        .min(8, 'Password must be at least 8 characters long.')
+        .regex(/[0-9]/, 'Password must contain one number.')
+        .regex(/[a-z]/, 'Password must contain one lowercase letter.')
+        .regex(/[A-Z]/, 'Password must contain one uppercase letter.'),
+
     otp: z
         .string({
             required_error: 'Verification code is required.',
@@ -82,3 +91,5 @@ export const resetPasswordVerifyFormInput = z.object({
 export type LoginFormType = z.infer<typeof loginFormInput>;
 export type SignupFormType = z.infer<typeof signupFormInput>;
 export type VerifyEmailFormType = z.infer<typeof verifyEmailFormInput>;
+export type ResetPasswordFormType = z.infer<typeof resetPasswordFormInput>;
+export type ResetPasswordVerifyFormType = z.infer<typeof resetPasswordVerifyFormInput>;

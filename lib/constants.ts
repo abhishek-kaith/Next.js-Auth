@@ -8,6 +8,8 @@ const constants = {
     SESSION_COOKIE_NAME: 'auth_session',
     SESSION_TOKEN_EXPIRY: 1000 * 60 * 60 * 24 * 60 * 2, // 2 months
     SESSION_TOKEN_RENEWAL_INTERVAL: 1000 * 60 * 60 * 24 * 15, // 15 day
+    PASSWORD_RESET_CODE_EXPIRY: 30 * 60 * 1000, // 30 minute
+    PASSWORD_RESET_COOKIE_NAME: 'auth_password_reset',
 };
 
 export default constants;

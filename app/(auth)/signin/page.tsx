@@ -36,6 +36,9 @@ export default function SignUpPage() {
                             </div>
                             <SigninForm />
                         </div>
+                        <Link className="mt-2 inline-block text-sm" href={paths.resetPassword}>
+                            Forgot Password?
+                        </Link>
                     </div>
                     <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
                         By clicking continue, you agree to our{' '}
