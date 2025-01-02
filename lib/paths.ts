@@ -8,6 +8,7 @@ const paths = {
     privacyPolicy: '/privacy-policy',
     termsOfService: '/terms-of-service',
     dashboard: '/dashboard',
+    firstTimeLogin: '/dashboard?welcome',
 };
 
 export default paths;

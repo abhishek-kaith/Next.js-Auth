@@ -25,7 +25,7 @@ const InputOtp = forwardRef<HTMLInputElement, InputOtpProps>(
                     setValue(props.defaultvalueinput);
                 }
             }
-        }, [props.defaultvalueinput]);
+        }, [props.defaultvalueinput, inputRef]);
         return (
             <OTPInput
                 ref={inputRef}

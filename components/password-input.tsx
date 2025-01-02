@@ -68,10 +68,6 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
                             setIsFocused(true);
                             props.onChange?.(e);
                         }}
-                        onBlur={(e) => {
-                            setIsFocused(false);
-                            props.onBlur?.(e);
-                        }}
                         aria-invalid={strengthScore < 4}
                         aria-describedby="password-strength"
                     />

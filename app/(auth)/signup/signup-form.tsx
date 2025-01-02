@@ -11,10 +11,10 @@ import { useActionState } from 'react';
 export default function SignupForm() {
     const [state, formAction, isPending] = useActionState(signupAction, {
         defaultValues: {
-            name: 'A',
-            email: 'a@a.com',
-            password: '123456',
-            confirmPassword: '123456',
+            name: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
         },
     });
 

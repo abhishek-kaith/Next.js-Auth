@@ -1,3 +1,4 @@
+import "server-only"
 import db from '@/db';
 import {
     LoginFormType,
@@ -8,8 +9,10 @@ import {
 import { otpTable, userTable, UserType } from '@/db/schema/auth.sql';
 import {
     createSession,
+    deleteSessionTokenCookie,
     generateSessionToken,
-    getCurrentSession,
+    getSession,
+    invalidateSession,
     invalidateUserSessions,
     setSessionTokenCookie,
 } from './auth.session';
@@ -24,9 +27,10 @@ export const createUser = async (data: SignupFormType) => {
     const user = await db.query.userTable.findFirst({
         where: (table, { eq }) => eq(table.email, data.email),
     });
+    const passwordHash = await hashInput(data.password);
     const userData = {
         email: data.email,
-        passwordHash: data.password,
+        passwordHash,
         name: data.name,
     };
     if (!user) {
@@ -81,7 +85,7 @@ export async function verifyEmailOtp(otp: string) {
     if (otpId === null) {
         return false;
     }
-    const { user } = await getCurrentSession();
+    const { user } = await getSession();
     if (!user) {
         return false;
     }
@@ -89,6 +93,9 @@ export async function verifyEmailOtp(otp: string) {
         where: (table, { eq, and }) => and(eq(table.id, otpId), eq(table.userId, user.id)),
     });
     if (!otpResult) {
+        return false;
+    }
+    if (otpResult.isUsed) {
         return false;
     }
     if (Date.now() >= otpResult.expiresAt.getTime()) {
@@ -166,6 +173,7 @@ export async function requestPasswordReset(
     }
 
     const otp = generateRandomOTP();
+    console.log("Reset password Otp: ", otp)
     const otpHash = await hashInput(otp);
 
     const [otpResult] = await db
@@ -179,7 +187,7 @@ export async function requestPasswordReset(
         .returning();
 
     const cookie = await cookies();
-    cookie.set(constants.PASSWORD_RESET_COOKIE_NAME, otp, {
+    cookie.set(constants.PASSWORD_RESET_COOKIE_NAME, otpResult.id, {
         httpOnly: true,
         path: '/',
         secure: env.NODE_ENV === 'production',
@@ -208,11 +216,26 @@ export async function verifyPasswordResetOtp(
         };
     }
     const { otp, password } = data;
-    const otpHash = await hashInput(otp);
+
     const otpData = await db.query.otpTable.findFirst({
-        where: (table, { eq, and }) => and(eq(table.id, otpId), eq(table.otpHash, otpHash)),
+        where: (table, { eq, and }) => and(eq(table.id, otpId)),
     });
     if (!otpData) {
+        return {
+            defaultValues: data,
+            message: 'Invalid verification code.',
+            status: 'error',
+        };
+    }
+    if (otpData.isUsed) {
+        return {
+            defaultValues: data,
+            message: 'Invalid verification code.',
+            status: 'error',
+        }
+    }
+    const isValid = await verifyHash(otpData.otpHash, otp);
+    if (!isValid) {
         return {
             defaultValues: data,
             message: 'Invalid verification code.',
@@ -252,6 +275,24 @@ export async function verifyPasswordResetOtp(
     return {
         defaultValues: data,
         message: 'Successfully reset password!',
+        status: 'success',
+    };
+}
+
+export async function logoutService(): Promise<ActionResponse<null>> {
+    const { user, session } = await getSession();
+    if (!user || !session) {
+        return {
+            defaultValues: null,
+            message: 'You are not logged in.',
+            status: 'error',
+        };
+    }
+    await deleteSessionTokenCookie();
+    await invalidateSession(session.id);
+    return {
+        defaultValues: null,
+        message: 'You have been logged out.',
         status: 'success',
     };
 }

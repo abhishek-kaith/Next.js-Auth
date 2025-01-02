@@ -1,3 +1,4 @@
+import "server-only"
 import { sessionTable, SessionType, userTable, UserType } from '@/db/schema/auth.sql';
 import { encodeHexLowerCase, encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
@@ -39,6 +40,14 @@ export async function validateSessionToken(token: string): Promise<SessionValida
         return { session: null, user: null };
     }
     const { user, session } = result[0];
+    const authUser: UserAuthType = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        emailVerifiedAt: user.emailVerifiedAt,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+    };
     if (Date.now() >= session.expiresAt.getTime()) {
         await db.delete(sessionTable).where(eq(sessionTable.id, session.id));
         return { session: null, user: null };
@@ -52,7 +61,7 @@ export async function validateSessionToken(token: string): Promise<SessionValida
             })
             .where(eq(sessionTable.id, session.id));
     }
-    return { session, user };
+    return { session, user: authUser };
 }
 
 export async function invalidateSession(sessionId: string): Promise<void> {
@@ -63,7 +72,8 @@ export async function invalidateUserSessions(userId: string): Promise<void> {
     await db.delete(sessionTable).where(eq(sessionTable.userId, userId));
 }
 
-export const getCurrentSession = cache(async (): Promise<SessionValidationResult> => {
+export const getSession = cache(async (): Promise<SessionValidationResult> => {
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
     const cookie = await cookies();
     const token = cookie.get(constants.SESSION_COOKIE_NAME)?.value ?? null;
     if (token === null) {
@@ -95,6 +105,9 @@ export async function deleteSessionTokenCookie(): Promise<void> {
     });
 }
 
+export type UserAuthType = Pick<UserType, 'id' | 'name' | 'email' | 'emailVerifiedAt' | 'createdAt' | 'updatedAt'>;
 export type SessionValidationResult =
-    | { session: SessionType; user: UserType }
+    | { session: SessionType; user: UserAuthType }
     | { session: null; user: null };
+
+export type DashboardSessionValidationResult = { session: SessionType; user: UserType };
