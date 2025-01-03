@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { BadgeCheck, Bell, CreditCard, LoaderCircle, LogOut, Sparkles } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { BadgeCheck, Bell, CreditCard, LoaderCircle, LogOut, Sparkles } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,13 +10,13 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import useLogout from '@/hooks/use-logout'
-import { Button } from '@/components/ui/button'
-import { UserAuthType } from '@/server/auth/auth.session'
+} from '@/components/ui/dropdown-menu';
+import useLogout from '@/hooks/use-logout';
+import { Button } from '@/components/ui/button';
+import { UserAuthType } from '@/server/auth/auth.session';
 
 export function UserDropdown({ user }: { user: UserAuthType }) {
-    const { action, isPending } = useLogout()
+    const { action, isPending } = useLogout();
 
     return (
         <DropdownMenu>
@@ -32,9 +32,7 @@ export function UserDropdown({ user }: { user: UserAuthType }) {
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">{user.name}</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                            {user.email}
-                        </p>
+                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -77,6 +75,5 @@ export function UserDropdown({ user }: { user: UserAuthType }) {
                 </form>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }
-

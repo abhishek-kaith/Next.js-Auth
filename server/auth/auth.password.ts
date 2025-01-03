@@ -1,4 +1,4 @@
-import "server-only"
+import 'server-only';
 import { hash, verify } from '@node-rs/argon2';
 import { encodeBase32UpperCaseNoPadding } from '@oslojs/encoding';
 

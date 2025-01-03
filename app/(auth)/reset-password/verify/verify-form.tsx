@@ -30,14 +30,18 @@ export default function OtpForm() {
                 )}
             </div>
 
-            <div className='flex flex-col items-center gap-3'>
-                <Label htmlFor='password'>New Password</Label>
-                <Input defaultValue={state?.defaultValues?.password} name="password" type="password" placeholder="New Password" />
+            <div className="flex flex-col items-center gap-3">
+                <Label htmlFor="password">New Password</Label>
+                <Input
+                    defaultValue={state?.defaultValues?.password}
+                    name="password"
+                    type="password"
+                    placeholder="New Password"
+                />
                 {state?.fieldError?.password && (
                     <p className="text-sm text-destructive">{state.fieldError.password}</p>
                 )}
             </div>
-
 
             <Button disabled={isPending} type="submit" className="w-fit">
                 {isPending && (

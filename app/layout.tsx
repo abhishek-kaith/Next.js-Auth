@@ -33,18 +33,13 @@ export default async function RootLayout({
         <html lang="en">
             <AuthProvider user={user}>
                 <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                    <header className='flex gap-3'>
+                    <header className="flex gap-3">
                         {Object.entries(paths).map(([name, path]) => (
-                            <Link
-                                key={path}
-                                href={path}
-                            >
+                            <Link key={path} href={path}>
                                 {name.toUpperCase()}
                             </Link>
                         ))}
-                        {user && (
-                            <UserDropdown user={user} />
-                        )}
+                        {user && <UserDropdown user={user} />}
                     </header>
                     {children}
                 </body>

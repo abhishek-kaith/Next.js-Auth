@@ -1,4 +1,4 @@
-import "server-only"
+import 'server-only';
 import db from '@/db';
 import {
     LoginFormType,
@@ -173,7 +173,7 @@ export async function requestPasswordReset(
     }
 
     const otp = generateRandomOTP();
-    console.log("Reset password Otp: ", otp)
+    console.log('Reset password Otp: ', otp);
     const otpHash = await hashInput(otp);
 
     const [otpResult] = await db
@@ -232,7 +232,7 @@ export async function verifyPasswordResetOtp(
             defaultValues: data,
             message: 'Invalid verification code.',
             status: 'error',
-        }
+        };
     }
     const isValid = await verifyHash(otpData.otpHash, otp);
     if (!isValid) {

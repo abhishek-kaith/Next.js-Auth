@@ -68,8 +68,8 @@ export const loginAction = createActionHandler(loginFormInput, async (input) => 
 
 export const resetPasswordAction = createActionHandler(resetPasswordFormInput, async (input) => {
     const result = await requestPasswordReset(input);
-    if (result.status === "success") {
-        throw redirect(paths.resetPasswordVerify)
+    if (result.status === 'success') {
+        throw redirect(paths.resetPasswordVerify);
     }
     return result;
 });
@@ -78,8 +78,8 @@ export const resetPasswordVerifyAction = createActionHandler(
     resetPasswordVerifyFormInput,
     async (input) => {
         const result = await verifyPasswordResetOtp(input);
-        if (result.status === "success") {
-            redirect(paths.dashboard)
+        if (result.status === 'success') {
+            redirect(paths.dashboard);
         }
         return result;
     },

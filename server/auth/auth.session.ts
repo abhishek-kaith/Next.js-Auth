@@ -1,4 +1,4 @@
-import "server-only"
+import 'server-only';
 import { sessionTable, SessionType, userTable, UserType } from '@/db/schema/auth.sql';
 import { encodeHexLowerCase, encodeBase32LowerCaseNoPadding } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
@@ -105,7 +105,10 @@ export async function deleteSessionTokenCookie(): Promise<void> {
     });
 }
 
-export type UserAuthType = Pick<UserType, 'id' | 'name' | 'email' | 'emailVerifiedAt' | 'createdAt' | 'updatedAt'>;
+export type UserAuthType = Pick<
+    UserType,
+    'id' | 'name' | 'email' | 'emailVerifiedAt' | 'createdAt' | 'updatedAt'
+>;
 export type SessionValidationResult =
     | { session: SessionType; user: UserAuthType }
     | { session: null; user: null };

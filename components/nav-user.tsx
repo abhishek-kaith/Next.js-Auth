@@ -1,6 +1,14 @@
 'use client';
 
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LoaderCircle, LogOut, Sparkles } from 'lucide-react';
+import {
+    BadgeCheck,
+    Bell,
+    ChevronsUpDown,
+    CreditCard,
+    LoaderCircle,
+    LogOut,
+    Sparkles,
+} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -97,7 +105,10 @@ export function NavUser({
                         <form>
                             <Button
                                 variant="destructive"
-                                formAction={action} disabled={isPending} className="w-full justify-start">
+                                formAction={action}
+                                disabled={isPending}
+                                className="w-full justify-start"
+                            >
                                 <LogOut />
                                 Log out
                                 {isPending && (

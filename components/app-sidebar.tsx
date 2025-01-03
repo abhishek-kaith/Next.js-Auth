@@ -168,10 +168,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <NavProjects projects={data.projects} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={{
-                    name: user?.name ?? 'N/A',
-                    email: user?.email ?? 'N/A',
-                }} />
+                <NavUser
+                    user={{
+                        name: user?.name ?? 'N/A',
+                        email: user?.email ?? 'N/A',
+                    }}
+                />
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>
